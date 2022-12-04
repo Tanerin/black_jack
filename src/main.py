@@ -125,7 +125,6 @@ class App(customtkinter.CTk):
         self.title("BlackJack_Shadow_isles")
         self.geometry("1920x1080")
         self.resizable(False,False)
-        self.attributes('-alpha',0.7)
         # ============ create base frames ============
 
         # configure grid layout (2x2)misc
@@ -212,13 +211,13 @@ class App(customtkinter.CTk):
         self.label_coins_back.place(x=0,y=0)
         self.label_image_board.place(x=0, y=0)
         
-        self.label_player_points= customtkinter.CTkLabel(master=self.frame_back, text="00",text_font=("Arial",27), width=30)
+        self.label_player_points= customtkinter.CTkLabel(master=self.frame_back, text="00",text_font=("Arial",27), width=30, text_color=theme["black"])
         self.label_player_points.place(x=345,y=603)
         
-        self.label_apuesta= customtkinter.CTkLabel(master=self.frame_back, text="Apuesta: $",text_font=("Arial",27), width=30)
+        self.label_apuesta= customtkinter.CTkLabel(master=self.frame_back, text="Apuesta: $",text_font=("Arial",27), width=30, text_color=theme["black"])
         self.label_apuesta.place(x=800,y=850)
         
-        self.label_dealer_points= customtkinter.CTkLabel(master=self.frame_back, text="00",text_font=("Arial",27), width=30)
+        self.label_dealer_points= customtkinter.CTkLabel(master=self.frame_back, text="00",text_font=("Arial",27), width=30, text_color=theme["black"])
         self.label_dealer_points.place(x=345,y=383)
         
         self.anadir_carta = customtkinter.CTkButton(master=self.frame_back, text="Otra carta?", width=200, height=80, corner_radius=0, text_font=("Arial",20), background=theme["dr_gold"], fg_color=theme["dr_gold"], text_color=theme["black"], hover_color=theme["lg_gold"], command=lambda:draw_card(self), state="disabled")
@@ -3234,7 +3233,9 @@ class App(customtkinter.CTk):
             self.figar_apuesta.configure(state="enabled")
         
         def set_bet():
-            if(bet > 0):
+            global bet
+            global money
+            if(bet > 0 and money >= 0):
                 self.figar_apuesta.configure(state="disabled")
                 self.button_add_coin1.configure(state="disabled")
                 self.button_add_coin10.configure(state="disabled")
