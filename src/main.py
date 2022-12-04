@@ -107,6 +107,7 @@ Cards_array = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22
 Game_array = Cards_array
 np.random.shuffle(Game_array)
 hand_wins =0
+hand_loses = 0 
 index_card = 0
 player_points = 0
 dealer_points = 0
@@ -232,6 +233,18 @@ class App(customtkinter.CTk):
         self.label_money= customtkinter.CTkLabel(master=self.frame_back, text="$10000",text_font=("Arial",27), width=200, height=80, corner_radius =0, fg_color= theme["dr_gold"], text_color= theme["black"])
         self.label_money.place(x=1650,y=150)
         
+        self.label_wins= customtkinter.CTkLabel(master=self.frame_back, text="Wins: 0",text_font=("Arial",27), width=200, height=80, corner_radius =0, fg_color= theme["dr_gold"], text_color= theme["black"])
+        
+        self.label_loses= customtkinter.CTkLabel(master=self.frame_back, text="Loses: 0",text_font=("Arial",27), width=200, height=80, corner_radius =0, fg_color= theme["dr_gold"], text_color= theme["black"])
+        
+        image_close = Image.open(PATH+"/img/misc/Close.png").resize((50,50))
+        self.image_Close = ImageTk.PhotoImage(image_close)
+        
+        self.close_button =  customtkinter.CTkButton(image= self.image_Close, border_width=0, master=self.frame_top, text="", width=50, height=50, corner_radius=0, compound="left", fg_color=theme["blue"], bg_color=theme["dr_blue"], hover_color=theme["blue"], command=lambda:on_closing(self))
+        self.close_button.place(x=0, y=0)
+        self.label_wins.place(x=25, y=25)
+        self.label_loses.place(x=225, y=25)
+        
         self.figar_apuesta.place(x=1650, y=810)
         self.anadir_carta.place(x=25, y=550)
         self.end_game.place(x=25, y=400)
@@ -243,6 +256,7 @@ class App(customtkinter.CTk):
             global last_draw_card
             if(last_draw_card > 48):
                 last_draw_card = 0
+                np.random.shuffle(Game_array)
             index_card = 1
             dealer_card1 = Game_array[last_draw_card]
             last_draw_card += 1
@@ -1424,6 +1438,7 @@ class App(customtkinter.CTk):
             global last_draw_card
             if(last_draw_card > 48):
                 last_draw_card = 0
+                np.random.shuffle(Game_array)
             index_card += 1 
             if(index_card == 2):                
                 if(dealer_points<16):
@@ -3241,32 +3256,34 @@ class App(customtkinter.CTk):
             self.button_rest_coin1000.configure(state="enabled")
             play(self)
             self.new_hand.configure(state="disabled")
-            
-            
-            
-            
+             
         def end_game():
             global player_points
             global dealer_points
             global hand_wins
             global bet
             global money
+            global hand_loses
             self.label_dealer_points.configure(text=str(dealer_points))
             if(player_points > 21):
                 Win = False
+                hand_loses += 1
             elif(dealer_points > 21):
                 Win = True              
             elif(player_points > dealer_points):
                 Win = True
-            elif(player_points > dealer_points):
+            elif(player_points == dealer_points):
                 Win = False
                 money += bet
             else:
                 Win = False
+                hand_loses += 1
             if(Win):
                 hand_wins += 1
                 money += 2*bet
             bet = 0
+            self.label_wins.configure(text="Wins:"+str(hand_wins)) 
+            self.label_loses.configure(text="Loses: "+str(hand_loses))
             self.label_apuesta.configure(text="Apuesta: $"+str(bet))
             self.label_money.configure(text="$"+str(money))
             self.new_hand.configure(state="enabled")
@@ -3286,6 +3303,9 @@ class App(customtkinter.CTk):
             money += value
             self.label_apuesta.configure(text="Apuesta: $"+str(bet))
             self.label_money.configure(text="$"+str(money))
+        
+        def on_closing(self, event=0):
+            self.destroy()
         
             
                 
