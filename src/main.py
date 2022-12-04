@@ -249,6 +249,34 @@ class App(customtkinter.CTk):
         self.anadir_carta.place(x=25, y=550)
         self.end_game.place(x=25, y=400)
         
+        self.frame_presentation = customtkinter.CTkFrame(master=self, width=1920,height=1030, corner_radius=0, fg_color=theme["blue"])
+        mifoto= Image.open(PATH +"/img/misc/mifoto.jpg").resize((300,300))
+        logo = Image.open(PATH +"/img/misc/lg.png").resize((300,300))
+        self.mifoto = ImageTk.PhotoImage(mifoto)
+        self.logo = ImageTk.PhotoImage(logo)
+        self.label_name = customtkinter.CTkLabel(master= self.frame_presentation, text="Proyecto Final", text_font=("Arial", 25))
+        self.label_mifoto = customtkinter.CTkLabel(master= self.frame_presentation, image=self.mifoto) 
+        self.label_logo = customtkinter.CTkLabel(master= self.frame_presentation, image=self.logo) 
+        self.btn_sig = customtkinter.CTkButton(master=self.frame_presentation, text="Siguiente", width=100, height=50, fg_color=theme["gold"], bg_color=theme["dr_blue"], hover_color=theme["dr_gold"], command= lambda:change_game(), corner_radius= 0)
+        self.frame_textbox_bar = customtkinter.CTkFrame(master= self.frame_presentation)
+        vsc= self.scrollbar = customtkinter.CTkScrollbar(master= self.frame_textbox_bar, orientation='vertical')
+        description= self.textbox_presentation= customtkinter.CTkTextbox(master= self.frame_textbox_bar, yscrollcommand=vsc.set, width=400, height=200)
+        self.textbox_presentation.insert("end","Este es mi curriculum\n\n")
+        self.textbox_presentation.insert("end","Mi nombre es: Jorge Ulises Ramirez Carrasco\n\n")
+        self.textbox_presentation.insert("end","Carrera: Ing. Mecatronica\n\n")
+        self.textbox_presentation.insert("end","Semestre: 5to Semestre\n\n\n\n\n")
+        self.textbox_presentation.insert("end","Lenguaje Orientado a Objetos\n\n")
+        self.textbox_presentation.insert("end","Proyecto final\n\n")
+        self.textbox_presentation.insert("end","BlackJack\n\n")
+        self.textbox_presentation.configure(state="disabled")
+        self.frame_textbox_bar.place(x=700, y=500)
+        vsc.pack(side="right", fill="y")
+        description.pack(side="left", fill= "y")       
+        self.label_name.place(x=800, y=0)
+        self.label_logo.place(x=30, y=50)
+        self.label_mifoto.place(x=1600, y=50)
+        self.btn_sig.place(x=1820, y=900)
+        self.frame_presentation.grid(row=1, column=0,columnspan=2, sticky="nw")
         def play(self):
             global index_card
             global player_points
@@ -3307,6 +3335,10 @@ class App(customtkinter.CTk):
         def on_closing(self, event=0):
             self.destroy()
         
+        def change_game():
+            self.frame_presentation.grid_forget()
+            self.frame_back.grid(row=1, column=0,columnspan=2, sticky="nw") 
+                   
             
                 
                 
